@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  clipboard:
+    build: .
+    container_name: clipboard_dev
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - .:/app
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    network_mode: host
+    command: bash
