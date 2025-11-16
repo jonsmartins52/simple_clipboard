@@ -4,9 +4,11 @@ from gi.repository import Gtk
 
 from clipboard_manager import ClipboardManager
 from ui.main_window import MainWindow
+from storage.json_storage import JsonStorage
 
 def main():
-  manager = ClipboardManager(callback=None)
+  storage = JsonStorage()
+  manager = ClipboardManager(callback=None, storage=storage)
   
   win = MainWindow(manager)
   win.connect("destroy", Gtk.main_quit)
