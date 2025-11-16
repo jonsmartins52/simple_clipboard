@@ -28,7 +28,16 @@ class ClipboardManager:
     except Exception:
       pass
 
-  
+  def clear_history(self):
+    self.history = []
+    self.storage.save(self.history)
+    self.clipboard.set_text("", -1)
+    try:
+      self.clipboard.store()
+    except:
+      pass
+      
+    self._last_text = ""
   
   def _check_clipboard(self):
     try:
