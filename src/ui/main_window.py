@@ -25,6 +25,8 @@ class MainWindow(Gtk.Window):
     self.listbox = Gtk.ListBox()
     scrolled.add(self.listbox)
 
+    self.listbox.connect("row-activated", self.on_row_activated)
+
     self.full_history = self.clipboard_manager.history
     self.populate_list(self.full_history)
 
@@ -60,3 +62,30 @@ class MainWindow(Gtk.Window):
       ]
 
     self.populate_list(filtered)
+
+  def on_row_activated(self, listbox, row):
+    child = row.get_child()
+    if not child:
+      return
+    
+    try:
+      text = child.get_text()
+    except Exception:
+      label = child.get_child()
+      text = label.get_text() if label else ""
+
+    if not text:
+      return
+    
+    self.clipboard.set_text(text, -1)
+
+    try:
+      self.clipboard.store()
+    except Exception:
+      pass
+
+  '''def on_item_clicked(self, row, evnet):
+    label = row.get_child()
+    text = label.get_text()
+
+    self.clipboard.set_text(text, -1)'''
