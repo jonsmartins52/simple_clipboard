@@ -3,20 +3,22 @@ class HistoryController:
     self.clipboard_manager = clipboard_manager
     self.on_history_changed = on_history_changed
 
+    self.query = ""
+
     self.full_history = clipboard_manager.history.copy()
     self.filtered_history = self.full_history.copy()
 
     self.clipboard_manager.callback = self.add_item
 
   def apply_query(self, query: str):
-    q = query.lower().strip()
+    self.query = query.lower().strip()
 
-    if q == "":
+    if self.query == "":
       self.filtered_history = self.full_history.copy()
     else:
       self.filtered_history = [
         item for item in self.full_history
-        if q in item.lower()
+        if self.query in item.lower()
       ]
 
     self._notify()
