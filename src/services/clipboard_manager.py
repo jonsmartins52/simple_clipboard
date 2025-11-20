@@ -11,6 +11,7 @@ class ClipboardManager:
      self._last_text = ""
      self._timeout_id = None
      self.max_items = 20
+     self.suppress_next_copy_event = False
 
   def start(self):
     initial = self.clipboard.wait_for_text()
@@ -45,6 +46,12 @@ class ClipboardManager:
     except Exception as e:
       return True
     
+
+    if self.suppress_next_copy_event:
+      self.suppress_next_copy_event = False
+      self._last_text = text
+      return True
+
     if text and text != self._last_text:
       self._last_text = text
 

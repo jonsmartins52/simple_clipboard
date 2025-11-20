@@ -36,15 +36,13 @@ class MainWindow(Gtk.Window):
 
         # FOOTER
         self.footer = FooterBar(self._on_clear_history)
-        self.vbox.pack_start(self.footer, False, False, 0)
-
-        # CONTROLLER → LISTA
-        # método correto é "render_items", não "populate"
+        self.vbox.pack_start(self.footer, False, False, 0)        
 
     # -----------------------------------------------------
     # Copiar item selecionado
     # -----------------------------------------------------
     def _on_history_item_clicked(self, full_text: str):
+        self.controller.clipboard_manager.suppress_next_copy_event = True
         self.clipboard.set_text(full_text, -1)
 
         try:
@@ -69,6 +67,7 @@ class MainWindow(Gtk.Window):
 
         if response == Gtk.ResponseType.OK:
             self.controller.clear()
+            self.search_bar.set_text("")
 
     def on_history_changed(self, filtered_items):
         self.history_list.render_items(filtered_items, self.controller.query)
@@ -78,29 +77,34 @@ class MainWindow(Gtk.Window):
     # -----------------------------------------------------
     def _load_css(self):
         css = b"""
-        .history-row {
+        row.history-row {
             padding: 12px;
             margin-bottom: 10px;
             border-radius: 8px;
-            background: #ffffff;
+            background-color: #ffffff;
+            border: 1px solid rgba(0,0,0,0.08);
             box-shadow: 0 1px 4px rgba(0,0,0,0.12);
         }
 
-        .history-title {
+        label.history-title {
             font-weight: bold;
             font-size: 14px;
             color: #222;
         }
 
-        .history-body {
+        label.history-body {
             color: #555;
             font-size: 11px;
             margin-top: 4px;
         }
 
-        .history-row:hover {
-            background: #f8f8f8;
+        row.history-row:hover {
+            background-color: #f8f8f8;
             box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+        }
+
+        span {
+            text-shadow: none;
         }
         """
 

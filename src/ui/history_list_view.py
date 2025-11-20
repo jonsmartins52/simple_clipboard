@@ -9,8 +9,14 @@ class HistoryListView(Gtk.ScrolledWindow):
     self.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
     self.listbox = Gtk.ListBox()
+    self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
     self.listbox.connect("row-activated", self._on_row_activated)
     self.add(self.listbox)
+
+  def _smart_truncate(self, text:str, max_chars: int) -> str:
+     if len(text) <= max_chars:
+        return text
+     return text[:max_chars -3] + "..."
 
   def render_items(self, items: list[str], query: str = ""):
     for child in self.listbox.get_children():
@@ -24,13 +30,9 @@ class HistoryListView(Gtk.ScrolledWindow):
 
   def _create_list_item(self, full_text: str, query: str):
       first_line = full_text.split("\n", 1)[0]
-      if len(first_line) > 60:
-          first_line = first_line[:60] + "..."
-
-      if len(full_text) > 120:
-          display_text = full_text[:120] + "..."
-      else:
-          display_text = full_text
+      
+      title_text = self._smart_truncate(first_line, 60)
+      body_text = self._smart_truncate(full_text, 120)
 
       box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
       box.get_style_context().add_class("history-row")
@@ -41,13 +43,13 @@ class HistoryListView(Gtk.ScrolledWindow):
       
       title = Gtk.Label(xalign=0)
       title.get_style_context().add_class("history-title")
-      highlighted_title = self._highlight_text(first_line, query)
+      highlighted_title = self._highlight_text(title_text, query)
       title.set_markup(f"<b>{highlighted_title}</b>")
       title.set_line_wrap(False)
 
       body = Gtk.Label( xalign=0)
       body.get_style_context().add_class("history-body")
-      highlighted_body = self._highlight_text(display_text, query)
+      highlighted_body = self._highlight_text(body_text, query)
       body.set_markup(highlighted_body)
       body.set_line_wrap(True)
       body.set_max_width_chars(60)
@@ -56,7 +58,7 @@ class HistoryListView(Gtk.ScrolledWindow):
       box.pack_start(body, False, False, 0)
 
       row = Gtk.ListBoxRow()
-      row.full_text = full_text   # ← salva o texto verdadeiro no row
+      row.full_text = full_text
       row.add(box)
 
       return row
