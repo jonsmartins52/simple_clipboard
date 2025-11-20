@@ -10,7 +10,14 @@ class FooterBar(Gtk.Box):
         self.set_margin_end(10)
         self.set_margin_bottom(10)
 
-        self.clear_btn = Gtk.Button(label="Limpar histórico")
+        icon = Gtk.Image.new_from_icon_name("edit-clear", Gtk.IconSize.BUTTON)
+
+        self.clear_btn = Gtk.Button()
+        self.clear_btn.set_image(icon)
+        self.clear_btn.set_always_show_image(True)
+        self.clear_btn.set_label("Limpar")
+        self.clear_btn.set_relief(Gtk.ReliefStyle.NONE)
+        self.clear_btn.set_tooltip_text("Limpar histórico")
         self.clear_btn.connect("clicked", self._on_clear)
 
         self.pack_start(self.clear_btn, False, False, 0)

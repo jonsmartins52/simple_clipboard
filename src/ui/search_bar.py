@@ -21,6 +21,12 @@ class SearchBar(Gtk.Box):
 
         self.pack_start(self.entry, False, False, 0)
 
+    def set_text(self, text: str):
+        self.entry.set_text(text)
+
+    def get_text(self) -> str:
+        return self.entry.get_text()
+
     def _on_changed(self, entry):
         if self.on_query_changed:
             self.on_query_changed(entry.get_text())

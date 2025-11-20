@@ -40,7 +40,6 @@ class MainWindow(Gtk.Window):
 
         # CONTROLLER → LISTA
         # método correto é "render_items", não "populate"
-        #self.controller.on_history_changed = self.history_list.render_items
 
     # -----------------------------------------------------
     # Copiar item selecionado
