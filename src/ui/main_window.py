@@ -76,40 +76,16 @@ class MainWindow(Gtk.Window):
     # CSS
     # -----------------------------------------------------
     def _load_css(self):
-        css = b"""
-        row.history-row {
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            background-color: #ffffff;
-            border: 1px solid rgba(0,0,0,0.08);
-            box-shadow: 0 1px 4px rgba(0,0,0,0.12);
-        }
-
-        label.history-title {
-            font-weight: bold;
-            font-size: 14px;
-            color: #222;
-        }
-
-        label.history-body {
-            color: #555;
-            font-size: 11px;
-            margin-top: 4px;
-        }
-
-        row.history-row:hover {
-            background-color: #f8f8f8;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.18);
-        }
-
-        span {
-            text-shadow: none;
-        }
-        """
-
         provider = Gtk.CssProvider()
-        provider.load_from_data(css)
+
+        css_path = "src/ui/styles.css"
+
+        try:
+            provider.load_from_path(css_path)
+        except Exception as e:
+            print("Erro ao carregar css: ", e)
+            return
+        
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(),
             provider,
