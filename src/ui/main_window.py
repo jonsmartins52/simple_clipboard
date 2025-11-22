@@ -1,14 +1,19 @@
 import gi
-#gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gdk
 
 from src.ui.search_bar import SearchBar
 from src.ui.history_list_view import HistoryListView
 from src.ui.footer_bar import FooterBar
+from src.ui.icon_loader import load_app_icon
 
 class MainWindow(Gtk.Window):
     def __init__(self, controller, clipboard):
         super().__init__(title="Clipboard History")
+
+        icon = load_app_icon("src/assets/icons/blink")
+        if icon:
+            self.set_icon(icon)
+
         self.set_default_size(600, 400)
 
         self.controller = controller
